@@ -20,7 +20,10 @@ impl Interpreter {
         let stmt_ast = parse_stmt(stmt)?;
         match self.fold_stmt(&stmt_ast) {
             Ok(conv) => { Ok(conv.v * conv.mpl) }
-            Err(err) => { Ok(0.0) }
+            Err(err) => {
+                println!("{}", err);
+                Ok(0.0)
+            }
         }
     }
 
