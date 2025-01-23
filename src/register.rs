@@ -1,8 +1,8 @@
-use std::collections::HashMap;
-use once_cell::sync::OnceCell;
-use std::sync::{Mutex, MutexGuard};
 use crate::common::load_units;
-use crate::units:: Unit;
+use crate::units::Unit;
+use once_cell::sync::OnceCell;
+use std::collections::HashMap;
+use std::sync::{Mutex, MutexGuard};
 
 pub static UNITS: OnceCell<Mutex<HashMap<String, Unit>>> = OnceCell::new();
 

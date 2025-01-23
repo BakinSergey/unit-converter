@@ -1,10 +1,10 @@
+use crate::register::units;
 use crate::units::Unit;
 use pathbuf::pathbuf;
 use std::collections::HashMap;
 use std::error::Error;
 use std::fs;
 use std::path::PathBuf;
-use crate::register::units;
 
 pub const ACCURACY: usize = 10;
 
@@ -17,7 +17,7 @@ pub fn load_units_from_file(path: PathBuf) -> Result<Vec<Unit>, Box<dyn Error>> 
     Ok(units)
 }
 
-pub fn load_units()-> HashMap<String, Unit> {
+pub fn load_units() -> HashMap<String, Unit> {
     let c_units = pathbuf!["./voc/c_units.json"];
     let cu = load_units_from_file(c_units).unwrap();
 
@@ -66,6 +66,7 @@ pub fn prefixes() -> HashMap<&'static str, i32> {
         ("М",  6),
         ("к",  3),
         ("г",  2),
+        ("да", 1),
         ("д", -1),
         ("с", -2),
         ("м", -3),

@@ -1,7 +1,6 @@
 // Folder: transform parsed units to C-System of units
 
 use crate::ast::*;
-use crate::register::UNITS;
 use crate::units::{BaseUnits, ParsedUnit};
 
 #[derive(Debug, thiserror::Error)]
@@ -36,7 +35,6 @@ pub(crate) trait Folder {
 
                 // coherent
                 if src_base.is_coherent(&dst_base) {
-
                     base.units = src_base.units;
                     base.mpl = src_base.mpl / dst_base.mpl;
 

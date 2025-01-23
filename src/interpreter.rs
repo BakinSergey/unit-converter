@@ -10,7 +10,6 @@ pub struct Interpreter {
 }
 
 impl Interpreter {
-
     pub fn new() -> Interpreter {
         Self { state: BaseUnits::new() }
     }
@@ -20,7 +19,7 @@ impl Interpreter {
         enter_validation(stmt)?;
         let stmt_ast = parse_stmt(stmt)?;
         match self.fold_stmt(&stmt_ast) {
-            Ok(conv) => { Ok(conv.v * conv.mpl) },
+            Ok(conv) => { Ok(conv.v * conv.mpl) }
             Err(err) => { Ok(0.0) }
         }
     }
@@ -35,16 +34,17 @@ impl Interpreter {
     pub fn deco(&mut self, stmt: &str) -> Result<String, Box<dyn Error>> {
         enter_validation(stmt)?;
 
-        println!("{}", stmt);
-        println!();
+        // println!("{}", stmt);
+        // println!();
 
         let stmt = parse_stmt(stmt)?;
+        // println!("{:?}", stmt);
         let deco = self.fold_stmt(&stmt)?;
         self.state = deco.clone();
 
-        let mut  rf: Vec<Unit> = deco.units.values().cloned().
+        let mut rf: Vec<Unit> = deco.units.values().cloned().
             into_iter().map(|x| x).collect::<Vec<Unit>>();
-        let mpl = format!("{:.3}", self.state.mpl);
+        let mpl = format!("{:.8}", self.state.mpl);
 
         rf.sort_by(|a, b| {
             a.tag.cmp(&b.tag)

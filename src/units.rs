@@ -1,10 +1,10 @@
 use crate::common::prefixes;
 use crate::folder::UnitsError;
+use crate::register;
+use crate::register::units;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 use std::sync::MutexGuard;
-use crate::register;
-use crate::register::units;
 
 fn f64_one() -> f64 {
     1.0
@@ -163,10 +163,13 @@ impl BaseUnits {
                 if u.pfx.is_some() {
                     let pfx = u.pfx.unwrap();
                     mpl = match all_prefixes.get(pfx.as_str()) {
-                        Some(pfx_mpl) => 10f64.powi(*pfx_mpl * (pow as i32)),
+                        Some(pfx_pow) => 10f64.powi(*pfx_pow),
                         None => return Err(UnitsError::NoUnitPrefix(pfx)),
                     };
                 }
+
+                mpl = mpl.powi(pow as i32);
+
                 // если знаменатель
                 if u.den {
                     mpl = 1.0 / mpl;
@@ -204,7 +207,9 @@ pub fn to_bases(u: &Unit, voc: &HashMap<String, Unit>) -> (f64, Vec<Unit>) {
     let mut mpl: f64 = 1.0;
 
     if u.base.is_empty() {
-        mpl *= u.mpl.powi(u.pow as i32);
+        mpl *= u.mpl; //.powi(u.pow as i32);
+        // u.mpl = 1; ???
+        // mpl *= u.mpl.powi(u.pow as i32);
         return (mpl, vec![u.clone()]);
     }
 

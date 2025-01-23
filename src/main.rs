@@ -8,21 +8,21 @@ pub mod parser;
 pub mod units;
 pub mod register;
 
-use crate::common::all_units;
+use crate::common::{all_prefixes, all_units};
 use crate::interpreter::Interpreter;
 use crate::register::init_units;
 
 fn main() {
-
-    let deco = true;
     let deco = false;
+    let deco = true;
 
-    let exp = "Па/дм^2";
     // let exp = "1 акр^2=>м^4";
-    let exp = "1 акр^2/сут^3=>м^4/с^3";
+    // let exp = "1 акр^2/сут^3=>м^4/с^3";
+    let exp = "кг/с_м^-2";
 
     init_units();
-    println!("{}", all_units());
+    println!("units: {}\n", all_units());
+    println!("pfxes: {}", all_prefixes());
 
     let mut ii = Interpreter::new();
     if deco {
@@ -49,18 +49,18 @@ mod test_common {
             (5, "1 к_Па^2/сут^3=>кг^2/м^2*с^7", 1.55045359574252e-9),
             (6, "1 к_Па^2/м_сут^3=>кг^2/м^2*с^7", 1.55045359574252),
             (7, "1 к_Па^2/см^3=>кг^2/м^5*с^4", 1e12),
-            // (8, "1 к_Па^2/с_м^3=>кг^2/м^5*с^4", 1e12), ??? 1e-12
+            (7, "1 к_Па^2/с_м^3=>кг^2/м^5*с^4", 1e12),
             (9, "1 к_Па^2/км^2=>кг^2/м^4*с^4", 1.0),
-            // (9, "1 к_Па^2/к_м^2=>кг^2/м^4*с^4", 1.0),  ??? 1e18
+            (9, "1 к_Па^2/к_м^2=>кг^2/м^4*с^4", 1.0),
             (10, "1 ч^2=>с^2", 1.296e7),
             (11, "1 сут^2=>с^2", 7.46496e9),
             (12, "1 сут=>с", 86400.0),
             (13, "1 мес30^2=>с^2", 6.94427904e12),
             (14, "1 км/ч=>м/с", 0.2777777778),
             (15, "1 сут^2/кгс^2=>с^6/кг^2*м^2", 77622233.2930381),
-            // (16, "1 кг/м^3=>м_г/д_м^3", 1000.0), ??? 1e15
+            (16, "1 кг/м^3=>м_г/д_м^3", 1000.0),
             (16, "1 кг/м^3=>м_г/дм^3", 1000.0),
-            // (17, "1 атм/м^2=>Па/д_м^2", 1.01325e3),
+            (17, "1 атм/м^2=>Па/д_м^2", 1.01325e3),
             (17, "1 атм/м^2=>Па/дм^2", 1.01325e3),
             (18, "1 атм=>Па", 1.01325e5),
             (19, "1 тс^3/В^2=>кг*А^2*м^-1", 9.431092984355795e11),
@@ -75,7 +75,16 @@ mod test_common {
     #[allow(dead_code)]
     pub fn test_deco_data<'a>() -> Vec<(u8, &'a str, &'a str)> {
         vec![
-            (1, "Па/дм^2", "100.000 [кг^1 * м^-3 * с^-2]"),
+            (1, "Па/дм^2", "100.00000000 [кг^1 * м^-3 * с^-2]"),
+            (2, "кг/см^-2", "0.00010000 [кг^1 * м^2]"),
+            (3, "кг/с_м^-2", "0.00010000 [кг^1 * м^2]"),
+            (4, "к_г/с_м^-2", "0.00010000 [кг^1 * м^2]"),
+            (5, "к_г/см^-2", "0.00010000 [кг^1 * м^2]"),
+            (6, "кг/д_дм^-2", "0.00010000 [кг^1 * м^2]"),
+            (7, "к_г/д_дм^-2", "0.00010000 [кг^1 * м^2]"),
+            (8, "м_т/д_дм^-2", "0.00010000 [кг^1 * м^2]"),
+            (9, "м_т/см^-2", "0.00010000 [кг^1 * м^2]"),
+            (10, "м_т/с_м^-2", "0.00010000 [кг^1 * м^2]"),
         ]
     }
 
@@ -321,8 +330,8 @@ mod test_parser_stmt {
 #[cfg(test)]
 mod test_folder {
     use crate::register::units;
-    use crate::units::{to_bases, BaseUnits, ParsedUnit, Unit};
     use crate::test_common::init_units;
+    use crate::units::{to_bases, BaseUnits, ParsedUnit, Unit};
 
     fn log(h: &str, src: Unit, m: f64, v: Vec<Unit>) {
         println!("1 {:?} = {:?} {:?}^{:?}", h, src.mpl, src.tag, src.pow);
@@ -353,7 +362,6 @@ mod test_folder {
         };
         let (m, v) = to_bases(&ba, &voc);
         log("A", ba, m, v.clone());
-        println!("========");
 
         let mut a: Unit = voc.get("A").unwrap().clone();
         let a2 = {
@@ -363,7 +371,6 @@ mod test_folder {
         };
         let (m, v) = to_bases(&a2, &voc);
         log("A^2", a2, m, v.clone());
-        println!("========");
 
         let mut a: Unit = voc.get("A").unwrap().clone();
         let ka = {
@@ -373,7 +380,6 @@ mod test_folder {
         };
         let (m, v) = to_bases(&ka, &voc);
         log("кA", ka, m, v.clone());
-        println!("========");
 
         let mut a: Unit = voc.get("A").unwrap().clone();
         let sa = {
@@ -383,8 +389,6 @@ mod test_folder {
         };
         let (m, v) = to_bases(&sa, &voc);
         log("sA", sa, m, v.clone());
-        println!("========");
-
 
         let mut a: Unit = voc.get("A").unwrap().clone();
         let ka2 = {
@@ -394,7 +398,6 @@ mod test_folder {
         };
         let (m, v) = to_bases(&ka2, &voc);
         log("кA^2", ka2, m, v.clone());
-        println!("========");
 
         let mut a: Unit = voc.get("A").unwrap().clone();
         let sa2 = {
@@ -421,7 +424,6 @@ mod test_folder {
         };
         let (m, v) = to_bases(&kn, &voc);
         log("кН", kn, m, v.clone());
-        println!("========");
 
         // к_Н^2
         let mut n: Unit = voc.get("Н").unwrap().clone();
@@ -432,7 +434,6 @@ mod test_folder {
         };
         let (m, v) = to_bases(&kn2, &voc);
         log("кН^2", kn2, m, v.clone());
-        println!("========");
 
         // d_Н^3
         let mut n: Unit = voc.get("Н").unwrap().clone();
@@ -443,7 +444,6 @@ mod test_folder {
         };
         let (m, v) = to_bases(&dn3, &voc);
         log("дН^3", dn3, m, v.clone());
-        println!("========");
 
         let mut n: Unit = voc.get("кгс").unwrap().clone();
         let kgs = {
@@ -526,7 +526,7 @@ mod test_interpreter {
                 Ok(v) => {
                     print!("{i:5} ");
                     assert_eq!(v, *expected);
-                    println!("PASSED: {deco} = {v}");
+                    println!("DECO PASSED: {deco} = {v}");
                 }
                 Err(_e) => assert!(false),
             }
@@ -544,7 +544,7 @@ mod test_interpreter {
                 Ok(v) => {
                     print!("{i:5} ");
                     assert!((v - ex_mpl).abs() < EPS);
-                    println!("PASSED: {conv} = {v}");
+                    println!("CONV PASSED: {conv} = {v}");
                 }
                 Err(_e) => assert!(false),
             }
