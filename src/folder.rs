@@ -1,14 +1,12 @@
-#![allow(unused_imports)]
-#![allow(dead_code)]
-
 // Folder: transform parsed units to C-System of units
 
 use crate::ast::*;
+use crate::register::UNITS;
 use crate::units::{BaseUnits, ParsedUnit};
 
 #[derive(Debug, thiserror::Error)]
 pub enum UnitsError {
-    #[error("units not coherent:\n{0}\n<=>\n{1}")]
+    #[error("units not coherent:{0} <=> {1}")]
     NotCoherent(String, String),
 
     #[error("unit {0} not found")]
@@ -33,13 +31,11 @@ pub(crate) trait Folder {
                 let mut base = BaseUnits::new();
                 base.v = *v;
 
-                let mut src_base = self.fold_expr(src)?;
-                let mut dst_base = self.fold_expr(dst)?;
+                let src_base = self.fold_expr(src)?;
+                let dst_base = self.fold_expr(dst)?;
 
                 // coherent
                 if src_base.is_coherent(&dst_base) {
-                    src_base.multiplier();
-                    dst_base.multiplier();
 
                     base.units = src_base.units;
                     base.mpl = src_base.mpl / dst_base.mpl;
@@ -71,6 +67,15 @@ pub(crate) trait Folder {
                         _ => return Err(UnitsError::NoUnit("sorry".into())),
                     }
                 }
+                // reduce to bases
+                // до вызова reduce, bases содержит единицы после парсинга,
+                // т.е. не приведенные к самым базовым
+                // (но уже в формате базовых единиц(pfx -> mpl)).
+                // reduce - приводит все единицы к самым базовым.
+
+                // mpl of base here is 1.0
+                base = base.reduce();
+                // mpl of base here != 1.0
                 Ok(base)
             }
 

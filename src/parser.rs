@@ -1,8 +1,4 @@
-#![allow(dead_code)]
-
 use crate::ast::*;
-use Expr::*;
-use Stmt::*;
 
 //@fmt:off
 const CONV: &str = "=>";
@@ -60,8 +56,8 @@ pub fn enter_validation(input: &str) -> Result<&str, ParseError> {
             Err(_) => return Err(ParseError::ValueWrongBegin(input.to_owned())),
         };
         // exactly one '=>' allowed
-        let sep = inp.next().unwrap().matches(CONV).count();
-        match sep {
+        let conv = inp.next().unwrap().matches(CONV).count();
+        match conv {
             1 => (),
             _ => return Err(ParseError::ExactlyOneExprSeparator()),
         }
@@ -115,7 +111,7 @@ pub fn parse_unit(input: &str, den: bool) -> Result<Expr, ParseError> {
         }
         tag = pt.next().unwrap().to_string();
     }
-    Ok(Unit { pfx, tag, pow, den })
+    Ok(Expr::Unit { pfx, tag, pow, den })
 }
 
 pub fn parse_expr(input: &str) -> Result<Expr, ParseError> {
@@ -138,7 +134,7 @@ pub fn parse_expr(input: &str) -> Result<Expr, ParseError> {
             frac_dn.push(parse_unit(e, true)?);
         }
     }
-    Ok(Fraction {
+    Ok(Expr::Fraction {
         up: frac_up,
         down: frac_dn,
     })
@@ -152,7 +148,7 @@ pub fn parse_stmt(input: &str) -> Result<Stmt, ParseError> {
 
         let (lft, rht) = inp.next().unwrap().split_once(CONV).unwrap();
 
-        return Ok(Conversation(Convert(
+        return Ok(Stmt::Conversation(Expr::Convert(
             val,
             Box::new(parse_expr(lft)?),
             Box::new(parse_expr(rht)?),
@@ -160,5 +156,5 @@ pub fn parse_stmt(input: &str) -> Result<Stmt, ParseError> {
     }
 
     // Decomposition statement
-    Ok(Decomposition(parse_expr(input)?))
+    Ok(Stmt::Decomposition(parse_expr(input)?))
 }
