@@ -119,6 +119,7 @@ impl BaseUnits {
             units.extend(b_units);
             mpl *= m;
         }
+        // println!("{:?}", units);
         self.units.clear();
 
         // fill from scratch with totally bases
@@ -229,6 +230,7 @@ pub fn to_bases(u: &Unit, voc: &HashMap<String, Unit>) -> (f64, Vec<Unit>) {
                     c.pow *= p.pow;
                     c.mpl = c.mpl.powi(p.pow as i32);
                 }
+                // println!("{:?}", p.base);
                 new_base_units.extend(p.base.clone());
                 continue;
             }
@@ -236,23 +238,31 @@ pub fn to_bases(u: &Unit, voc: &HashMap<String, Unit>) -> (f64, Vec<Unit>) {
             // get from voc
             if let Some(voc_unit) = voc.get(&p.tag) {
                 let mut unit = voc_unit.clone();
-
-                // apply parent pow to child
-                for c in &mut unit.base {
-                    c.pow *= p.pow;
-                    c.mpl = c.mpl.powi(p.pow as i32);
+                if !p.base.is_empty() {
+                    // apply parent pow to child
+                    for c in &mut unit.base {
+                        c.pow *= p.pow;
+                        c.mpl = c.mpl.powi(p.pow as i32);
+                    }
+                    // println!("{:?}", unit.base);
+                    new_base_units.extend(unit.base);
+                } else {
+                    unit.pow *= p.pow;
+                    unit.mpl = unit.mpl.powi(p.pow as i32);
+                    new_base_units.push(unit);
                 }
-                new_base_units.extend(unit.base);
             }
             mpl *= p.mpl;
         };
 
-        if !new_base_units.is_empty() {
+        // if !new_base_units.is_empty() {
+        if new_base_units != base_units {
             base_units = new_base_units;
         } else { break; }
     }
 
     mpl *= u.mpl;
+    // println!("{:?}", base_units);
     (mpl, base_units)
 }
 

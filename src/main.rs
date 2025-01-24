@@ -18,7 +18,9 @@ fn main() {
 
     // let exp = "1 акр^2=>м^4";
     // let exp = "1 акр^2/сут^3=>м^4/с^3";
-    let exp = "кг/с_м^-2";
+    let exp = "кгс/см^2";
+    let exp = "с_Н";
+    // let exp = "ат";
 
     init_units();
     println!("units: {}\n", all_units());
