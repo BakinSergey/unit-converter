@@ -13,14 +13,23 @@ use crate::interpreter::Interpreter;
 use crate::register::init_units;
 
 fn main() {
-    let deco = false;
     let deco = true;
+    let deco = false;
 
     // let exp = "1 акр^2=>м^4";
     // let exp = "1 акр^2/сут^3=>м^4/с^3";
-    let exp = "кгс/см^2";
-    let exp = "с_Н";
-    // let exp = "ат";
+    // let exp = "кгс/см^2";
+    // let exp = "с_Н";
+
+    // let exp = "1 ат=>мм.рт.ст";
+    // let exp = "1 кгс/см^2=>мм.рт.ст";
+    //let exp = "1 М_Па=>мм.рт.ст";
+    // let exp = "1 Па=>мм.рт.ст";
+    // let exp = "1 мм.рт.ст=>мм.вод.ст";
+    // let exp = "1 м*кг*м*кг*м*кг*м*м=>м^5*кг^3";
+    // let exp = "кгс^2/кгс^1";
+    let exp = "1 кгс^2/кгс^-1=>кгс^3";
+
 
     init_units();
     println!("units: {}\n", all_units());
@@ -72,6 +81,9 @@ mod test_common {
             (23, "1 сут^2/кгс^2=>с^6/кг^2*м^2", 77622233.2930381),
             (24, "1 акр^2/сут^3=>м^4/с^3", 2.5391851259e-8),
             (25, "1 акр^2/сут^2=>м^4/с^2", 2.1938559488e-3),
+            (26, "1 м*кг*м*кг*м*кг*м*м=>м^5*кг^3", 1.0),
+            (27, "1 кгс^2/кгс=>кгс", 1.0),
+            (28, "1 кгс^2/кгс^-1=>кгс^3", 1.0),
         ]
     }
     #[allow(dead_code)]
@@ -439,7 +451,7 @@ mod test_folder {
         let (m, v) = to_bases(&kn2, &voc);
         log("кН^2", kn2, m, v.clone());
 
-        // d_Н^3
+        // д_Н^3
         let mut n: Unit = voc.get("Н").unwrap().clone();
         let dn3 = {
             n.pow = 3;
@@ -449,6 +461,7 @@ mod test_folder {
         let (m, v) = to_bases(&dn3, &voc);
         log("дН^3", dn3, m, v.clone());
 
+        // кгс
         let mut n: Unit = voc.get("кгс").unwrap().clone();
         let kgs = {
             n.pow = 1;
