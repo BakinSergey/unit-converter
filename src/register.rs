@@ -38,6 +38,7 @@ pub fn prefixes() -> HashMap<&'static str, i32> {
         ("п", -12),
     ])
 }
+//@fmt:on
 
 pub fn load_units() -> HashMap<String, Unit> {
     let c_units = pathbuf!["./voc/c_units.json"];

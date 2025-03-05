@@ -13,13 +13,14 @@ use crate::interpreter::Interpreter;
 use crate::register::init_units;
 
 fn main() {
-    let deco = true;
     let deco = false;
+    let deco = true;
 
     // let exp = "1 акр^2=>м^4";
     // let exp = "1 акр^2/сут^3=>м^4/с^3";
     // let exp = "кгс/см^2";
     // let exp = "с_Н";
+    let exp = "A";
 
     // let exp = "1 ат=>мм.рт.ст";
     // let exp = "1 кгс/см^2=>мм.рт.ст";
@@ -28,8 +29,7 @@ fn main() {
     // let exp = "1 мм.рт.ст=>мм.вод.ст";
     // let exp = "1 м*кг*м*кг*м*кг*м*м=>м^5*кг^3";
     // let exp = "кгс^2/кгс^1";
-    let exp = "1 кгс^2/кгс^-1=>кгс^3";
-
+    // let exp = "1 кгс^2/кгс^-1=>кгс^3";
 
     init_units();
     println!("units: {}\n", all_units());

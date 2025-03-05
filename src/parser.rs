@@ -2,11 +2,11 @@ use crate::ast::*;
 
 //@fmt:off
 const CONV: &str = "=>";
-const MUL: &str = "*";
-const DIV: &str = "/";
-const WS: &str = " ";
-const US: &str = "_";
-const PW: &str = "^";
+const MUL: &str  = "*";
+const DIV: &str  = "/";
+const WS: &str   = " ";
+const US: &str   = "_";
+const PW: &str   = "^";
 //@fmt:on
 
 #[derive(Debug, thiserror::Error)]
@@ -36,8 +36,8 @@ pub enum ParseError {
 pub fn enter_validation(input: &str) -> Result<&str, ParseError> {
     // So, about our little dsl grammar...
     // valid inputs are:
-    //  - float[WS]unit_expr[CONV]unit_expr  ( with only one whitespace )
-    //  - unit_expr
+    //  - [float][WS][unit_expr][CONV][unit_expr]  ( with only one whitespace )
+    //  - [unit_expr]
     // unit_expr can contain one or several Unit, separated by many * and|or exactly one /
     // Unit is constrained as: pfx[US]tag[PW]pow
 

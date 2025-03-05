@@ -92,7 +92,7 @@ impl BaseUnits {
     fn merge_base_one(&mut self, bu: Unit) {
         match self.units.get_mut(&bu.tag) {
             Some(unit) => {
-                unit.mpl *= bu.mpl; // must be 1.0 for all(?)
+                unit.mpl *= bu.mpl;
                 unit.pow += bu.pow;
             }
             None => {

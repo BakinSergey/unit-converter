@@ -37,11 +37,7 @@ impl Interpreter {
     pub fn deco(&mut self, stmt: &str) -> Result<String, Box<dyn Error>> {
         enter_validation(stmt)?;
 
-        // println!("{}", stmt);
-        // println!();
-
         let stmt = parse_stmt(stmt)?;
-        // println!("{:?}", stmt);
         let deco = self.fold_stmt(&stmt)?;
         self.state = deco.clone();
 
@@ -49,6 +45,8 @@ impl Interpreter {
             into_iter().map(|x| x).collect::<Vec<Unit>>();
         let mpl = format!("{:.8}", self.state.mpl);
 
+        // сортируем в целях более простых
+        // ассертов в тестах с использованием .to_string
         rf.sort_by(|a, b| {
             a.tag.cmp(&b.tag)
                 .then(a.pow.cmp(&b.pow))
