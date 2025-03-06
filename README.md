@@ -72,10 +72,30 @@ ToDo:
 - использовать Antlr (грамматика, токенизация, лексер, парсер)
 
 some proof of concept && clean room development:
-![вычисления в SMath](/img/smath.png)
+<figure>
+  <img
+  src="/img/smath.png"
+  alt="вычисления в SMath">
+  <figcaption>проверки в пакете SMath Studio</figcaption>
+</figure>
 
-![синтетический тест](/img/synthetic.jpg)
+<figure>
+  <img
+  src="/img/synthetic.jpg"
+  alt="синтетический тест">
+  <figcaption>синтетический тест</figcaption>
+</figure>
 
-![отладка](/img/um.jpg)
+<figure>
+  <img
+  src="/img/um.jpg"
+  alt="отладка">
+  <figcaption>отладка</figcaption>
+</figure>
 
-![композиция](/img/um2.jpg)
+<figure>
+  <img
+  src="/img/um2.jpg"
+  alt="композиция классов">
+  <figcaption>композиция классов, абстрактное синтаксическое дерево(AST)</figcaption>
+</figure>
