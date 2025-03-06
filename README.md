@@ -78,4 +78,4 @@ some proof of concept && clean room development:
 
 ![отладка](/img/um.jpg)
 
-![композиция](/img/um2.png)
+![композиция](/img/um2.jpg)
