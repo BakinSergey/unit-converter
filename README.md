@@ -72,10 +72,10 @@ ToDo:
 - использовать Antlr (грамматика, токенизация, лексер, парсер)
 
 some proof of concept && clean room development:
-![вычисления в SMath]("./img/smath.png")
+![вычисления в SMath]("/img/smath.png")
 
-![синтетический тест]("./img/synthetic.jpg")
+![синтетический тест]("/img/synthetic.jpg")
 
-![отладка]("./img/um.jpg")
+![отладка]("/img/um.jpg")
 
-![композиция]("./img/um2.png")
+![композиция]("/img/um2.png")
