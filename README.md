@@ -10,7 +10,6 @@
 
 - singleton:
     https://docs.rs/once_cell/latest/once_cell/
-    
 
 Библиотека реализует DSL для описания единиц измерения и их конвертации.
 Парсер и токенизатор реализованы без исп-ия сторонних библиотек.
@@ -71,3 +70,12 @@
 
 ToDo:
 - использовать Antlr (грамматика, токенизация, лексер, парсер)
+
+some proof of concept && clean room development:
+![вычисления в SMath]("img/smath.png")
+
+![синтетический тест]("img/synthetic.jpg")
+
+![отладка]("img/um.jpg")
+
+![композиция]("img/um2.png")
