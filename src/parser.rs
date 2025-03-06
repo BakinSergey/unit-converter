@@ -39,7 +39,7 @@ pub fn enter_validation(input: &str) -> Result<&str, ParseError> {
     //  - [float][WS][unit_expr][CONV][unit_expr]  ( with only one whitespace )
     //  - [unit_expr]
     // unit_expr can contain one or several Unit, separated by many * and|or exactly one /
-    // Unit is constrained as: pfx[US]tag[PW]pow
+    // Unit is constrained as: [pfx][US][tag][PW][pow]
 
     // 0 or 1 space is allowed
     let ws: usize = input.matches(WS).count();
